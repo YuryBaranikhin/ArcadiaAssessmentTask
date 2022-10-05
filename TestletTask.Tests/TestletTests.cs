@@ -57,4 +57,23 @@ public partial class TestletTests
         // assert
         result1.Should().NotContainInOrder(result2);
     }
+
+    [Fact]
+    public void Randomize_should_eventually_return_operational_item_for_3d_or_4th_element()
+    {
+        // arrange
+        var testlet = CreateTestlet();
+        bool succeded = false;
+
+        // act
+        for (int i = 0; !succeded && i < 1000; i++)
+        {
+            var result = testlet.Randomize();
+            succeded = result[2].ItemType == ItemTypeEnum.Operational ||
+                       result[3].ItemType == ItemTypeEnum.Operational;
+        }
+
+        // assert
+        succeded.Should().BeTrue();
+    }
 }
