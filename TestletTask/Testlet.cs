@@ -17,8 +17,8 @@ public class Testlet
     {
         var result = new List<Item>(Items.Count);
 
-        result.AddRange(Shuffle(Items.Where(x => x.ItemType == ItemTypeEnum.Pretest).ToList()));
-        result.AddRange(Shuffle(Items.Except(result).ToList()));
+        result.AddRange(Shuffle(Items.Where(x => x.ItemType == ItemTypeEnum.Pretest)));
+        result.AddRange(Shuffle(Items.Except(result)));
 
         return result;
     }
@@ -26,7 +26,7 @@ public class Testlet
     /// <summary>
     /// <see href="https://en.wikipedia.org/wiki/Fisher–Yates_shuffle">Fisher–Yates shuffle</see>
     /// </summary>
-    private IReadOnlyList<Item> Shuffle(IReadOnlyList<Item> itemsToShuffle)
+    private IReadOnlyList<Item> Shuffle(IEnumerable<Item> itemsToShuffle)
     {
         var trgRandom = GetRandom();
         var result = new List<Item>(itemsToShuffle);
