@@ -17,7 +17,7 @@ public class Testlet
     {
         var result = new List<Item>(Items.Count);
 
-        result.AddRange(Shuffle(Items.Where(x => x.ItemType == ItemTypeEnum.Pretest)));
+        result.AddRange(Shuffle(Items.Where(x => x.ItemType == ItemTypeEnum.Pretest).Take(2)));
         result.AddRange(Shuffle(Items.Except(result)));
 
         return result;
