@@ -48,15 +48,16 @@ public class TestletTests
     }
 
     [Fact]
-    // might be fragile
-    // ToDo: init randomizer with different seeds
     public void Randomize_should_return_different_results()
     {
         // arrange
-        var testlet = CreateTestlet();
+        var testlet = CreateTestletWrapper();
 
         // act
+        // set randomizer with specific seed to avoid situation of getting same random results two times in a row
+        testlet.Randomizer = new Random(1);
         var result1 = testlet.Randomize();
+        testlet.Randomizer = new Random(2);
         var result2 = testlet.Randomize();
 
         // assert
@@ -66,6 +67,12 @@ public class TestletTests
     private Testlet CreateTestlet(IReadOnlyList<Item>? items = null)
     {
         return new Testlet(_fixture.Create<string>(),
+            items?.ToList() ?? CreateInitialTestletItemsCollection().ToList());
+    }
+
+    private TestletWrapper CreateTestletWrapper(IReadOnlyList<Item>? items = null)
+    {
+        return new TestletWrapper(_fixture.Create<string>(),
             items?.ToList() ?? CreateInitialTestletItemsCollection().ToList());
     }
 
@@ -85,5 +92,18 @@ public class TestletTests
         result.AddRange(operationalItems);
 
         return result;
+    }
+
+    private class TestletWrapper : Testlet
+    {
+        public Random? Randomizer { get; set; }
+        public TestletWrapper(string testletId, List<Item> items) : base(testletId, items)
+        {
+        }
+
+        protected override Random GetRandom()
+        {
+            return Randomizer ?? base.GetRandom();
+        }
     }
 }

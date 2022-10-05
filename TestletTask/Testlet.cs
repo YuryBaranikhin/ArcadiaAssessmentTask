@@ -5,14 +5,12 @@ public class Testlet
     public string TestletId;
     private List<Item> Items;
 
-    private readonly Random Random;
+    protected static readonly Random Random = Random.Shared;
 
     public Testlet(string testletId, List<Item> items)
     {
         TestletId = testletId;
         Items = items;
-
-        Random = new Random();
     }
 
     public List<Item> Randomize()
@@ -30,14 +28,20 @@ public class Testlet
     /// </summary>
     private IReadOnlyList<Item> Shuffle(IReadOnlyList<Item> itemsToShuffle)
     {
+        var trgRandom = GetRandom();
         var result = new List<Item>(itemsToShuffle);
 
         for (var n = result.Count - 1; n > 0; --n)
         {
-            var k = Random.Next(n + 1);
+            var k = trgRandom.Next(n + 1);
             (result[n], result[k]) = (result[k], result[n]);
         }
 
         return result;
+    }
+
+    protected virtual Random GetRandom()
+    {
+        return Random;
     }
 }
