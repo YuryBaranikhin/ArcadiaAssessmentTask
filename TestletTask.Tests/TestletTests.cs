@@ -59,6 +59,11 @@ public partial class TestletTests
     }
 
     [Fact]
+    // The test is necessary to avoid a situation where each time 4 pretest items come first and then come 6 operational items
+    // Implementation without using a probabilistic approach can lead to strong coupling
+    // The probability of a false negative outcome is less than 10^-301
+    // A few values for comparison: the number of atoms in the observable universe is about 10^81
+    // The number of seconds elapsed from the moment of the Big Bang to the present time is 10^17
     public void Randomize_should_eventually_return_operational_item_for_3d_or_4th_element()
     {
         // arrange
